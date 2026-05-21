@@ -1,27 +1,35 @@
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
+import {useUsuario} from '../components/UsuarioContext'
 import InputField from "../components/inputField";
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
+    const [user, setUser] = useState('');
     const [senha, setSenha] = useState('');
     const [erro, setErro] = useState('');
 
+    const {setUsuario} = useUsuario();
+
+    const navigate = useNavigate();
+
     function handleSubmit(e){
         e.preventDefault();
-        if (!email || !senha){
+        if (!user || !senha){
             setErro('Preencha todos os campos');
             return; 
         }
         setErro('');
         console.log('Login:', email, senha);
+        setUsuario(user);
+        navigate('/dashboard');
     }
 
     return(
         <form onSubmit={handleSubmit}>
             <InputField 
-                label="Endereço de e-mail"
-                placeholder="user@email.com"
-                type="email" 
+                label="Usuario"
+                placeholder="username"
+                type="text" 
                 value={email}
                 onChange={e => setEmail(e.target.value)}
             />
@@ -32,7 +40,7 @@ export default function LoginPage() {
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
             > 
-            <a href="esqueceu.html"> Esqueceu?</a>
+                <a href="esqueceu.html"> Esqueceu?</a>
             </InputField>
 
             {erro && <p>{erro}</p>}
